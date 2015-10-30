@@ -1,5 +1,3 @@
-
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -33,33 +31,31 @@ public class Controller {
 
 	public static TreeMap<String, Integer> SubDomainHash = new TreeMap<String, Integer>();
 
-	/*public static void main(String []args) throws Exception
+	public static void main(String []args) throws Exception
 	{
-		Date date = new Date();
+	Date date = new Date();
     	System.out.println(date.toString());
-		//Initializing the stop words Hash
-		WordFrequencies.InitializeStopWords();  //Stop words Hash is initialized
-		*/
-		/*CrawlConfig config = new CrawlConfig();  
-		config.setCrawlStorageFolder("C:\\Users\\Gautham\\workspace\\SearchEngine\\src\\Crawler\\CrawledPages");  //Storage Folder
-		config.setMaxDepthOfCrawling(50); //Setting the Maximum Depth of crawl to 100
-		config.setResumableCrawling(true);
-		config.setPolitenessDelay(300);
-		//config.setUserAgentString("UCI WebCrawler 25963407 51604754 19121142");
-		PageFetcher pageFetcher = new PageFetcher(config);
+	//Initializing the stop words Hash
+	WordFrequencies.InitializeStopWords();  //Stop words Hash is initialized
+		
+	CrawlConfig config = new CrawlConfig();  
+	config.setCrawlStorageFolder("C:\\Users\\Premnishanth\\workspace\\SearchEngine\\src\\Crawler\\CrawledPages");  //Storage Folder
+	config.setMaxDepthOfCrawling(50); //Setting the Maximum Depth of crawl to 100
+	config.setResumableCrawling(true);
+	config.setPolitenessDelay(300);
+	//config.setUserAgentString("UCI WebCrawler 25963407 51604754 19121142");
+	PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController crawlcontroller = new CrawlController(config, pageFetcher, robotstxtServer);
         crawlcontroller.addSeed("http://www.ics.uci.edu");
         crawlcontroller.start(MyCrawler.class, 5);
-        */
-		/*
+        
         //File Handles to write to files
         PrintWriter writer2 = new PrintWriter("/Users/PremNishanth/Desktop/JavaEclipse/Files/Frequency.txt");
         PrintWriter writer3 = new PrintWriter("/Users/PremNishanth/Desktop/JavaEclipse/Files/TwoGrams.txt");
         PrintWriter writer4 = new PrintWriter("/Users/PremNishanth/Desktop/JavaEclipse/Files/SubDomains1.txt");
 
-		
         MongoClient mongo = new MongoClient("localhost",27017);
     	//DB db = mongo.getDB("pgsDB");
         DB db = mongo.getDB("newDB");
@@ -68,9 +64,9 @@ public class Controller {
         //DBCollection indexColl = db.getCollection("indexColl");
         DBCollection indexColl = db.getCollection("indexCollnew");
     	DBCursor iter = collection.find();
-    	*/
+    	
     	//Finds the Top 500 Frequency words
-        /*DBObject unwind = new BasicDBObject("$unwind","$Frequency");
+        DBObject unwind = new BasicDBObject("$unwind","$Frequency");
         DBObject group = new BasicDBObject("$group",new BasicDBObject("_id","$Frequency.Word").append("Total",new BasicDBObject("$sum",1)));
         DBObject sort = new BasicDBObject("$sort",new BasicDBObject("Total",-1).append("_id",1));
         //DBObject limit = new BasicDBObject("$limit",100);
@@ -82,8 +78,7 @@ public class Controller {
         
         AggregationOptions agg = AggregationOptions.builder().allowDiskUse(true).build();
         Cursor out = collection.aggregate(pipe, agg);
-        */
-		/*
+        
     	double count = 0;
     	double tcount= 54120;
     	String DocID;
@@ -129,10 +124,6 @@ public class Controller {
     			inner_object.append("Positions", Term_Positions);
         		inner_object.append("TermFrequency", 1+Math.log(Term_Frequency));
         		Temp.add(inner_object);
-					// BasicDBObject update_object = new BasicDBObject("$set",
-					// new BasicDBObject().append("_id",
-					// HashPair.getKey())).append("$push", new
-					// BasicDBObject("Details",inner_object));
         		//BasicDBObject update_object = new BasicDBObject("$set", new BasicDBObject().append("_id", HashPair.getKey())).append("$push", new BasicDBObject("Details",new BasicDBObject("$each",Temp).append("$sort", new BasicDBObject("TermFrequency",-1))));
         		BasicDBObject update_object = new BasicDBObject("$set", new BasicDBObject().append("_id", HashPair.getKey())).append("$inc", new BasicDBObject("DocCount",1)).append("$push", new BasicDBObject("Details",new BasicDBObject("$each",Temp).append("$sort", new BasicDBObject("TermFrequency",-1))));
         		indexColl.update(new BasicDBObject("_id",HashPair.getKey()), update_object,true,false);
@@ -141,7 +132,6 @@ public class Controller {
     		catch(Exception ex)
     		{
     			System.out.println("Exception occurred:  "+ex.getMessage());
-    			
     		}
     	}
     	
@@ -154,13 +144,6 @@ public class Controller {
     		indexColl.update(new BasicDBObject("_id",holder.get("_id")), new BasicDBObject("$set",new BasicDBObject("IDF",Math.log(Total/(Integer)holder.get("DocCount")))),true,false);
     	}
     	
-    	*/
-    	
-    	
-    	
-    	
-    	
-         /*
         //Finds the Top 20 2gram words
         DBObject unwind1 = new BasicDBObject("$unwind","$TwoGramFrequency");
         DBObject group1 = new BasicDBObject("$group",new BasicDBObject("_id","$TwoGramFrequency.TwogramWord").append("Total",new BasicDBObject("$sum",1)));
@@ -185,11 +168,6 @@ public class Controller {
         DBObject fields = new BasicDBObject("Pages",1).append("URL", 1).append("_id", 0);
         DBCursor iter1 = collection.find(query,fields).sort(sortbySubDomain);
         
-        //while(iter1.hasNext())
-        //{
-        //	writer4.println(iter1.next());
-        //}
-        
         System.out.println("Max Word Count: " + iter.next().get("WordCount"));
         System.out.println("Number of Unique URLs :    " + collection.count());
         System.out.println("SubDomain Count : " + SubDomainHash.size());
@@ -201,7 +179,7 @@ public class Controller {
         TreeMap<String,Integer> HH = new TreeMap<String,Integer>();
         String Temp,Subd;
         Pattern p = Pattern.compile("(\\w+)\\.ics\\.uci\\.edu/(.+)?"); //Compiling the Pattern
-		Matcher match;
+	Matcher match;
         while(iter1.hasNext())
         {
         	Temp = iter1.next().get("URL").toString();
@@ -226,17 +204,14 @@ public class Controller {
         	//System.out.println("http://" + key + ".ics.uci.edu" + ":" + HH.get(key));
         	writer4.println("http://" + key + ".ics.uci.edu" + "            :             " + HH.get(key));
         }
-        
-        
+       
         //Closing data and file handles
     	mongo.close();
     	writer2.close();
     	writer3.close();
     	writer4.close();
     	System.out.println(date.toString());
-    	*/
-		
-		//Indexing Part
-		//SEngine.Search();
-	/*}*/
+    
+    	Indexing Part
+	SEngine.Search();
 }
