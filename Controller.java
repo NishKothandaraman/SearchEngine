@@ -39,7 +39,7 @@ public class Controller {
 	WordFrequencies.InitializeStopWords();  //Stop words Hash is initialized
 		
 	CrawlConfig config = new CrawlConfig();  
-	config.setCrawlStorageFolder("C:\\Users\\Premnishanth\\workspace\\SearchEngine\\src\\Crawler\\CrawledPages");  //Storage Folder
+	config.setCrawlStorageFolder("/Users/PremNishanth/Desktop/JavaEclipse/src/Crawler/CrawledPages");  //Storage Folder
 	config.setMaxDepthOfCrawling(50); //Setting the Maximum Depth of crawl to 100
 	config.setResumableCrawling(true);
 	config.setPolitenessDelay(300);
